@@ -71,6 +71,7 @@ char outPut(char *command){
   int printval;
   int valnum;
   int digi;
+  int cond;
   for(i = 0; i < MAX_LINE_LEN;i++){
     command[i] = toupper(command[i]);
   }
@@ -97,6 +98,14 @@ char outPut(char *command){
     i++;
     printval = command[i] - 'A';
     printf("%d\n",VALUE[printval]);
+  }
+  if(command[i] == '?'){
+    i++;
+    valnum = command[i] - 'A';
+    cond = VALUE[valnum];
+    if(!cond){
+      while(command[i++] != '\n');
+    }
   }
   //debug mode
   /*
