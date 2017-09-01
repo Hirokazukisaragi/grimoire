@@ -31,8 +31,13 @@ void inputLine();
 char outPut(char *command);
 //stack pointer
 long sp = 0;
+int VALUE[26];
+char VAL_FLAG = 0;
 int main(int argc,char *argv[]){
   int i = 0;
+  for(i = 0;i < 26;i++){
+    VALUE[i] = 0;
+  }
   command = malloc(MAX_LINE_LEN * sizeof(char *));
   for(i = 0;i < MAX_RAW;i++){
     command[i] = malloc(sizeof(char) * MAX_LINE_LEN);
@@ -63,9 +68,44 @@ void inputLine(){
 }
 char outPut(char *command){
   int i;
+  int printval;
+  int valnum;
+  int digi;
   for(i = 0; i < MAX_LINE_LEN;i++){
     command[i] = toupper(command[i]);
   }
+  i = 0;
+  if(command[i] == '$'){
+    i++;
+    valnum = command[i] - 'A';
+    i++;
+    if(command[i] == '='){
+      i++;
+      while(isdigit(command[i])){
+	digi = command[i] - '0';
+	VALUE[valnum] += digi;
+	i++;
+	if(isdigit(command[i])){
+	  VALUE[valnum] *= 10;
+	}
+      }
+    }
+    i++;
+  }
+  i=0;
+  if(command[i] == '!'){
+    i++;
+    printval = command[i] - 'A';
+    printf("%d\n",VALUE[printval]);
+  }
+  //debug mode
+  /*
+  int j;
+  for(j = 0;j < 26;j++){
+    printf("%c=",j+'A');
+    printf("%d\n",VALUE[j]);
+  }
+  */
   printf("%s",command);
   if(!strcmp(command,"END\n")){
     EXITFLAG = 1;
