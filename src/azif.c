@@ -91,7 +91,7 @@ char outPut(char *command){
   int valnum;
   int digi;
   int cond;
-  char tmpstr[1024];
+  //char tmpstr[1024];
   command = upper(command);
 
   i = 0;
@@ -183,7 +183,7 @@ void isTrue(){
   while(1){
     fgets(tmpstr,1024,fp);
     strcpy(tmpstr,upper(tmpstr));
-    if(!strcmp("THEN\n",tmpstr)){
+    if(!strcmp("BEGINT\n",tmpstr)){
       break;
     }
   }
