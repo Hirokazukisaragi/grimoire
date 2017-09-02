@@ -18,7 +18,9 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
-
+void isTrue(void);
+void isFalse(void);
+char *upper(char *command);
 char EXITFLAG = 0;
 const long MAX_LINE_LEN = 80;
 const long MAX_ROW = 20;
@@ -89,15 +91,16 @@ char outPut(char *command){
   int valnum;
   int digi;
   int cond;
-  for(i = 0; i < MAX_LINE_LEN;i++){
-    command[i] = toupper(command[i]);
-  }
+  char tmpstr[1024];
+  command = upper(command);
+
   i = 0;
   //ASSIGN
   if(command[i] == '$'){
     i++;
     //valnum = command[i] - 'A';
     valnum = retvalnum(command[i]);
+    VALUE[valnum] = 0;
     i++;
     if(command[i] == '='){
       i++;
@@ -119,12 +122,15 @@ char outPut(char *command){
     printval = retvalnum(command[i]);
     printf("%d\n",VALUE[printval]);
   }
+  //IF
   if(command[i] == '?'){
     i++;
     valnum = retvalnum(command[i]);
     cond = VALUE[valnum];
-    if(!cond){
-      while(command[i++] != '\n');
+    if(cond){
+      isTrue();
+    }else{
+      isFalse();
     }
   }
   //Random number
@@ -162,4 +168,33 @@ int retvalnum(char ch){
     exit(1);
   }
   return retnum;
+}
+
+char *upper(char *command){
+  int i;
+  for(i = 0; i < MAX_LINE_LEN;i++){
+    command[i] = toupper(command[i]);
+  }
+  return command;
+}
+
+void isTrue(){
+  char tmpstr[1024];
+  while(1){
+    fgets(tmpstr,1024,fp);
+    strcpy(tmpstr,upper(tmpstr));
+    if(!strcmp("THEN\n",tmpstr)){
+      break;
+    }
+  }
+}
+void isFalse(){
+  char tmpstr[1024];
+  while(1){
+    fgets(tmpstr,1024,fp);
+    strcpy(tmpstr,upper(tmpstr));
+    if(!strcmp("ENDIF\n",tmpstr)){
+      break;
+    }
+  }
 }
